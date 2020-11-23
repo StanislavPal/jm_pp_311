@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "roles")
 public class Role
-//        implements GrantedAuthority
+        implements GrantedAuthority
 {
 
     @Id
@@ -50,11 +50,11 @@ public class Role
         this.role = role.toUpperCase();
     }
 
-//    @Override
-//    public String getAuthority() {
-//        return role;
-//    }
-//
+    @Override
+    public String getAuthority() {
+        return role;
+    }
+
     @Override
     public String toString() {
         return "Role{" +
