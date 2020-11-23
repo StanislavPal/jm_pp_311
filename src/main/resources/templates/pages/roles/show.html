@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Role</title>
+</head>
+<body>
+<div th:object="${role}">
+    <p>  Id: <span th:text="*{id}">1</span>.</p>
+    <p>Role: <span th:text="*{role}">ROLE_USER</span>.</p>
+</div>
+<!--    <p th:text="${role.id}">Value</p>-->
+<!--    <p th:text="${role.role}">Value</p>-->
+</body>
+</html>

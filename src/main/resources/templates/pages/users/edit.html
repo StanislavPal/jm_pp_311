@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование</title>
+<body>
+
+<div>
+    <br/>
+    <form th:method="post" th:action="@{/admin/users/{id}(id=${user.id})}" th:object="${user}">
+        <label for="user_name_label">Username: </label>
+        <input th:field="*{username}" type="text" id="user_name_label">
+        <br/>
+
+        <label for="pass_label">Password: </label>
+        <input th:field="*{password}" type="hidden" id="pass_label">
+        <br/>
+
+        <label for="confirm_pass_label">Confirm Password: </label>
+        <input name="confirm_password" type="hidden" id="confirm_pass_label">
+        <br/>
+
+        <label for="name_label">Name: </label>
+        <input th:field="*{name}" type="text" id="name_label">
+        <br/>
+
+        <label for="lastname_label">Lastname: </label>
+        <input th:field="*{lastName}" type="text" id="lastname_label">
+        <br/>
+
+        <label for="age_label">Age: </label>
+        <input th:field="*{age}" type="number" id="age_label">
+        <br/>
+
+        Roles:
+        <th:block th:each="role : ${roles}">
+            <p><input type="checkbox" name="roles_checkbox"
+                      th:value="${role.key.role}"
+                      th:text="${role.key.role}"
+                      th:checked="${role.value}"></p>
+        </th:block>
+
+        <input type="submit" value="Обновить">
+    </form>
+</div>
+
+</body>
+</html>

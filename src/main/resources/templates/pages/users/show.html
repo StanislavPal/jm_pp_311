@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Юзер</title>
+</head>
+<body>
+    <p th:text="${user.username}">Value</p>
+    <p th:text="${user.password}">Value</p>
+    <p th:text="${user.name}">Value</p>
+    <p th:text="${user.lastname}">Value</p>
+    <p th:text="${user.age}">Value</p>
+    <ul>
+        <th:block th:each="role : ${user.roles}">
+            <li th:text="${role.name} [${role.role}]">role</li>
+        </th:block>
+    </ul>
+</body>
+</html>

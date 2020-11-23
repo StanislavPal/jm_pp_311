@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Юзеры</title>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #ffffff;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+<body>
+
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Возраст</th>
+            <th>Роль</th>
+            <th colspan="3">Действие</th>
+        </tr>
+        <th:block th:each="user : ${users}">
+            <tr>
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.password}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${user.age}"></td>
+<!--                <td th:text="${user.getRolesAsString()}"></td>-->
+                <td >
+                    <ul>
+                        <th:block th:each="role : ${user.roles}">
+                            <li th:text="${role.role}">ROLE_USER</li>
+                        </th:block>
+                    </ul>
+                </td>
+                <td><a th:href="@{/admin/users/{id}(id=${user.id})}">смотреть</a></td>
+                <td>
+                    <form th:method="post" th:action="@{/admin/users/{id}/delete(id=${user.id})}">
+                        <input type="submit" value="Удалить">
+                    </form>
+                </td>
+                <td><a th:href="@{/admin/users/{id}/edit(id=${user.id})}">редактировать</a></td>
+            </tr>
+        </th:block>
+    </table>
+    <p><a href="/admin/users/new">Добавить нового пользователя</a></p>
+    <p><a href="/admin/roles">Список ролей</a></p>
+    <p><a href="/admin/roles/new">Добавить новую роль</a></p>
+    <div th:replace="footer :: logout"></div>
+    <div th:insert="footer :: copy"></div>
+</body>
+</html>

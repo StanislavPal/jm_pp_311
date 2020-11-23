@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование роли</title>
+<body>
+
+<div>
+    <br/>
+    <form th:method="post" th:action="@{/admin/roles/{id}(id=${role.id})}" th:object="${role}">
+        <label for="role_label">Role: </label>
+        <input th:field="*{role}" type="text" id="role_label">
+        <br/>
+
+        <input type="submit" value="Обновить">
+    </form>
+</div>
+
+</body>
+</html>
