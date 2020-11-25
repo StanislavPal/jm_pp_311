@@ -55,20 +55,4 @@ public class RoleService {
         }
         return dbRoles;
     }
-
-    public Map<Role, Boolean> findAllWithUse(Role... roles) {
-        HashMap<Role, Boolean> hashMap = new HashMap<>();
-        for (Role role : findAll() ) {
-            Boolean checked = false;
-            for (Role usedRole : roles ) {
-                if (role.equals(usedRole)) {
-                    checked = true;
-                    break;
-                }
-            }
-            hashMap.put(role, checked);
-        }
-        return hashMap;
-    }
-
 }

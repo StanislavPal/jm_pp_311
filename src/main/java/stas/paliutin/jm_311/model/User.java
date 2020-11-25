@@ -10,9 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User
-        implements UserDetails
-{
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +31,7 @@ public class User
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
@@ -138,4 +136,8 @@ public class User
         this.roles = roles;
     }
 
+    public User setRole(Role role) {
+        roles.add(role);
+        return this;
+    }
 }

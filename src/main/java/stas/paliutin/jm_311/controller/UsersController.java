@@ -9,6 +9,9 @@ import stas.paliutin.jm_311.model.User;
 import stas.paliutin.jm_311.service.RoleService;
 import stas.paliutin.jm_311.service.UserService;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Controller
 @RequestMapping("/admin/users")
 public class UsersController {
@@ -25,12 +28,18 @@ public class UsersController {
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("users", userService.findAll());
+        User user = new User();
+        Set<Role> roles = new HashSet<>();
+        roles.add( roleService.findOne("ROLE_USER") );
+        user.setRoles( roles );
+        model.addAttribute("roles", roleService.findAll() );
+        model.addAttribute("user", user );
         return "users/index";
     }
 
     @GetMapping("/new")
     public String add(Model model) {
-        model.addAttribute("roles", roleService.findAllWithUse( roleService.findOne("ROLE_USER") ) );
+        model.addAttribute("roles", roleService.findAll() );
         return "users/new";
     }
 
@@ -49,7 +58,7 @@ public class UsersController {
             return "redirect:/admin/users";
         }
 
-        model.addAttribute("roles", roleService.findAllWithUse( user.getRoles().toArray(new Role[0]) ) );
+        model.addAttribute("roles", roleService.findAll() );
         model.addAttribute("user", user );
         return "users/edit";
     }
