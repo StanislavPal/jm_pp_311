@@ -2,8 +2,6 @@ package stas.paliutin.jm_311.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +23,8 @@ public class UserService {
     @Autowired
     private RoleService roleService;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public List<User> findAll() {
@@ -50,7 +48,7 @@ public class UserService {
 
     @Transactional
     public void create(User user) {
-//        user.setPassword( passwordEncoder.encode( user.getPassword() ) );
+        user.setPassword( passwordEncoder.encode( user.getPassword() ) );
         Set<Role> dbRoles = new HashSet<>();
         if (user.getRoles() != null) {
             for (Role role : user.getRoles() ) {
