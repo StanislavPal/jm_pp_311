@@ -14,8 +14,8 @@ public class RoleDaoImp extends AbstractJpaDao<Role> implements Dao<Role> {
         return entityManager.createQuery(
                 "select r " +
                         "from Role r " +
-                        "where r.role = :role", Role.class )
-                .setParameter("role", role)
+                        "where r.name = :name", Role.class )
+                .setParameter("name", role)
                 .getSingleResult();
     }
 

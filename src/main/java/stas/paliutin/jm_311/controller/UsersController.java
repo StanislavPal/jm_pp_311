@@ -4,13 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import stas.paliutin.jm_311.model.Role;
 import stas.paliutin.jm_311.model.User;
 import stas.paliutin.jm_311.service.RoleService;
 import stas.paliutin.jm_311.service.UserService;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/admin/users")
@@ -27,19 +23,16 @@ public class UsersController {
 
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("users", userService.findAll());
-        User user = new User();
-        Set<Role> roles = new HashSet<>();
-        roles.add( roleService.findOne("ROLE_USER") );
-        user.setRoles( roles );
+        model.addAttribute("new_user", new User().setRole( roleService.findOne("ROLE_USER") ) );
         model.addAttribute("roles", roleService.findAll() );
-        model.addAttribute("user", user );
+        model.addAttribute("users", userService.findAll() );
         return "users/index";
     }
 
     @GetMapping("/new")
     public String add(Model model) {
         model.addAttribute("roles", roleService.findAll() );
+        model.addAttribute("user", new User().setRole( roleService.findOne("ROLE_USER") ) );
         return "users/new";
     }
 
@@ -58,6 +51,7 @@ public class UsersController {
             return "redirect:/admin/users";
         }
 
+        user.setPassword("");
         model.addAttribute("roles", roleService.findAll() );
         model.addAttribute("user", user );
         return "users/edit";
@@ -73,7 +67,7 @@ public class UsersController {
     @PostMapping()
     public String create(@ModelAttribute("user") User user,
                          @RequestParam(value = "roles_checkbox", required = false) String[] roles) {
-        user.setRoles( roleService.findByRoles(roles) );
+        user.setRoles( roleService.findByNames(roles) );
         userService.create(user);
         return "redirect:/admin/users";
     }
@@ -81,7 +75,7 @@ public class UsersController {
     @PostMapping("/{id}")
     public String update(@ModelAttribute("user") User user,
                          @RequestParam(value = "roles_checkbox", required = false) String[] roles) {
-        user.setRoles( roleService.findByRoles(roles) );
+        user.setRoles( roleService.findByNames(roles) );
         userService.update(user);
         return "redirect:/admin/users";
     }

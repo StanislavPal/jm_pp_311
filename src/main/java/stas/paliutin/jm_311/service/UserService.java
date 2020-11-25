@@ -6,12 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import stas.paliutin.jm_311.dao.Dao;
-import stas.paliutin.jm_311.model.Role;
 import stas.paliutin.jm_311.model.User;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserService {
@@ -43,19 +40,17 @@ public class UserService {
 
     @Transactional
     public void update(User user) {
+        if (user.getPassword().equals("")) {
+            user.setPassword(getById(user.getId()).getPassword());
+        } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         userDao.update(user);
     }
 
     @Transactional
     public void create(User user) {
-        user.setPassword( passwordEncoder.encode( user.getPassword() ) );
-        Set<Role> dbRoles = new HashSet<>();
-        if (user.getRoles() != null) {
-            for (Role role : user.getRoles() ) {
-                dbRoles.add(roleService.findOne( role.getRole() ));
-            }
-        }
-        user.setRoles(dbRoles);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.create(user);
     }
 

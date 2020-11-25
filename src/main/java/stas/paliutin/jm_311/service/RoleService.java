@@ -46,7 +46,7 @@ public class RoleService {
         roleDao.create(role);
     }
 
-    public Set<Role> findByRoles(String[] roleNames) {
+    public Set<Role> findByNames(String[] roleNames) {
         Set<Role> dbRoles = new HashSet<>();
         if (roleNames != null) {
             for (String roleName : roleNames) {
@@ -55,4 +55,5 @@ public class RoleService {
         }
         return dbRoles;
     }
+
 }
