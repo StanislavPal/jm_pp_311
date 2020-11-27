@@ -1,20 +1,42 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title></title>
-</head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+    <title>Admin panel</title>
 <body>
-<code>
-    5. Пользователь с ролью user должен иметь доступ только к своей домашней странице /user, где выводятся его данные.
-    Доступ к этой странице должен быть только у пользователей с ролью user и admin.
-    Не забывайте про несколько ролей у пользователя!
-</code>
-<p>Доброго дня, <span th:text="${user.name}+' '+${user.lastName}"></span></p>
-<p><a href="/admin/users">Список пользователей</a></p>
-<p><a href="/admin/roles">Список ролей</a></p>
-<div th:replace="component :: logout"></div>
-<div th:insert="component :: copy"></div>
+
+<div th:replace="component :: navbar"></div>
+
+<div class="container-fluid hidden-md-down bg-light" >
+    <div class="row justify-content-center">
+        <div class="col-2 hidden-down bg-white p-0">
+
+            <ul class="nav flex-column nav-pills">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link " href="/admin">Admin</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/user">User</a>
+                </li>
+            </ul>
+
+        </div>
+        <div class="col-md-10 bg-white">
+
+            <h3>User information-page</h3>
+            <div th:replace="component :: user-table"></div>
+
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
 </body>
 </html>

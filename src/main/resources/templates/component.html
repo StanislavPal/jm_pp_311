@@ -1,17 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
+
 <div th:fragment="logout"><p><a href="/logout">Logout</a></p></div>
+
 <div th:fragment="copy"><p>© 2020 Stanislav Paliutin</p></div>
 
-<nav  th:fragment="navbar" class="bg-dark text-light">
-    <div class="row">
-        <div class="col-11">
-            <h5 th:text="${user.name}+' '+${user.lastName} + ' roles:' + ${user.rolesToString()}">Navbar</h5>
-        </div>
-        <div class="col-1">
-            <h5><a href="/logout">Logout</a></h5>
-        </div>
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#" th:text="${user.name}+' '+${user.lastName} + ' roles:' + ${user.rolesToString()}">Navbar brand</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/hello">Hello page <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <span class="navbar-text">
+            <a class="nav-link" href="/logout">Logout</a>
+    </span>
     </div>
 </nav>
 
@@ -174,50 +182,100 @@
     </div>
     <div class="card-body">
         <p class="card-text">
-            <table class="table table-hover">
+        <table class="table table-hover">
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Last name</th>
+                <th>Age</th>
+                <th>Role</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            <th:block th:each="user : ${users}">
                 <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Last name</th>
-                    <th>Age</th>
-                    <th>Role</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.age}"></td>
+                    <td th:text="${user.rolesToString()}"></td>
+                    <td>
+
+                        <button type="button" class="btn btn-info" data-toggle="modal" th:attr="data-target='#editModal' + ${user.id}">
+                            Edit
+                        </button>
+
+                        <!-- Modal -->
+                        <div th:replace="component :: modal-user-edit"></div>
+
+                    </td>
+                    <td>
+
+                        <button type="button" class="btn btn-danger" data-toggle="modal" th:attr="data-target='#deleteModal' + ${user.id}">
+                            Delete
+                        </button>
+
+                        <!-- Modal -->
+                        <div th:replace="component :: modal-user-delete"></div>
+
+                    </td>
                 </tr>
-                <th:block th:each="user : ${users}">
-                    <tr>
-                        <td th:text="${user.id}"></td>
-                        <td th:text="${user.username}"></td>
-                        <td th:text="${user.name}"></td>
-                        <td th:text="${user.lastName}"></td>
-                        <td th:text="${user.age}"></td>
-                        <td th:text="${user.rolesToString()}"></td>
-                        <td>
-
-                            <button type="button" class="btn btn-info" data-toggle="modal" th:attr="data-target='#editModal' + ${user.id}">
-                                Edit
-                            </button>
-
-                            <!-- Modal -->
-                            <div th:replace="component :: modal-user-edit"></div>
-
-                        </td>
-                        <td>
-
-                            <button type="button" class="btn btn-danger" data-toggle="modal" th:attr="data-target='#deleteModal' + ${user.id}">
-                                Delete
-                            </button>
-
-                            <!-- Modal -->
-                            <div th:replace="component :: modal-user-delete"></div>
-
-                        </td>
-                    </tr>
-                </th:block>
-            </table>
+            </th:block>
+        </table>
         </p>
     </div>
 </div>
+
+<div th:fragment="user-table" class="card">
+    <div class="card-header">
+        <h5 class="card-title">About user</h5>
+    </div>
+    <div class="card-body">
+        <p class="card-text">
+        <table class="table table-hover">
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Last name</th>
+                <th>Age</th>
+                <th>Role</th>
+            </tr>
+                <tr>
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.age}"></td>
+                    <td th:text="${user.rolesToString()}"></td>
+                </tr>
+        </table>
+        </p>
+    </div>
+</div>
+
+<div th:fragment="test-block">
+    <div class="row">
+        <div class="col">authenticated users:</div>
+        <div sec:authorize="isAuthenticated()" class="col">
+            This content is only shown to authenticated users.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">administrators:</div>
+        <div sec:authorize="hasRole('ROLE_ADMIN')" class="col">
+            This content is only shown to administrators.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">users:</div>
+        <div sec:authorize="hasRole('ROLE_USER')" class="col">
+            This content is only shown to users.
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

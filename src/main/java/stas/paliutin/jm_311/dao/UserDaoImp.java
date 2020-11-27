@@ -19,11 +19,11 @@ public class UserDaoImp extends AbstractJpaDao<User> implements Dao<User> {
                 .getSingleResult();
     }
 
-    @Override
-    public void deleteById( long entityId ){
-        int id = entityManager.createQuery(
-                "delete User where id = :id")
-                .setParameter("id", entityId)
-                .executeUpdate();
-    }
+//    @Override
+//    public void deleteById( long entityId ){
+//        int id = entityManager.createQuery(
+//                "delete User where id = :id")
+//                .setParameter("id", entityId)
+//                .executeUpdate();
+//    }
 }

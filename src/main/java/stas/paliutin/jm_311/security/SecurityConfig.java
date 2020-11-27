@@ -37,16 +37,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //страницы аутентификаци доступна всем
                 .antMatchers("/login").anonymous()
+                .antMatchers("/hello").permitAll()
                 // защищенные URL
                 //страница пользователя доступна только ролям мользователь и админ.
                 .antMatchers("/user").hasAnyRole("USER", "ADMIN")
                 //страницы доступные только админам
-                .antMatchers("/admin/**").access("hasAnyRole('ADMIN')")
-                .antMatchers("/hello").access("hasAnyRole('ADMIN')").anyRequest().authenticated()
+                .antMatchers("/admin/**").access("hasAnyRole('ADMIN')").anyRequest().authenticated()
                 .and()
                 .formLogin()
                 // указываем страницу с формой логина
-//                .loginPage("/login")
+                .loginPage("/login")
                 //указываем логику обработки при логине
                 .successHandler(new LoginSuccessHandler())
                 // указываем action с формы логина
@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
                 // даем доступ к форме логина всем
-                .permitAll()
+//                .permitAll()
                 //Настройка логаута
                 .and()
                 .logout()

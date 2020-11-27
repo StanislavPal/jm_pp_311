@@ -39,11 +39,6 @@ public class HelloController {
         return "login";
     }
 
-    @GetMapping("/admin")
-	public String adminPage() {
-		return "admin";
-	}
-
     @GetMapping("/user")
 	public String userPage(Principal principal, ModelMap model) {
 		User user = userService.findOne( principal.getName() );

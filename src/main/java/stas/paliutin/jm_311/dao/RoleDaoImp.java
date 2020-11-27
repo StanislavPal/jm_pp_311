@@ -19,11 +19,11 @@ public class RoleDaoImp extends AbstractJpaDao<Role> implements Dao<Role> {
                 .getSingleResult();
     }
 
-    @Override
-    public void deleteById( long entityId ){
-        int id = entityManager.createQuery(
-                "delete Role r where r.id = :id")
-                .setParameter("id", entityId)
-                .executeUpdate();
-    }
+//    @Override
+//    public void deleteById( long entityId ){
+//        int id = entityManager.createQuery(
+//                "delete Role r where r.id = :id")
+//                .setParameter("id", entityId)
+//                .executeUpdate();
+//    }
 }

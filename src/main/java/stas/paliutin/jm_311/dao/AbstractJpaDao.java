@@ -43,7 +43,9 @@ public abstract class AbstractJpaDao<T> implements Dao<T> {
 
     @Override
     public void deleteById( long entityId ){
-        T entity = findOne( entityId );
-        delete( entity );
+        int id = entityManager.createQuery(
+                "delete  " + clazz.getName() + " where id = :id")
+                .setParameter("id", entityId)
+                .executeUpdate();
     }
 }
