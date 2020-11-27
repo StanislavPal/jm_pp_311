@@ -8,6 +8,8 @@ import stas.paliutin.jm_311.model.User;
 import stas.paliutin.jm_311.service.RoleService;
 import stas.paliutin.jm_311.service.UserService;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/admin/users")
 public class UsersController {
@@ -22,9 +24,15 @@ public class UsersController {
     }
 
     @GetMapping()
-    public String index(Model model) {
+    public String index(Principal principal, Model model) {
+        User user = userService.findOne( principal.getName() );
+        //Информация о залогиневшемся юзере
+        model.addAttribute("user", user);
+        //Чистый объект с заполненной ролью по умолчанию, для формы нового пользователя
         model.addAttribute("new_user", new User().setRole( roleService.findOne("ROLE_USER") ) );
+        //Список всех доступных ролей
         model.addAttribute("roles", roleService.findAll() );
+        //Список всех юзеров
         model.addAttribute("users", userService.findAll() );
         return "users/index";
     }

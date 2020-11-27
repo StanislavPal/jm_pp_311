@@ -140,4 +140,12 @@ public class User implements UserDetails {
         roles.add(role);
         return this;
     }
+
+    public String rolesToString() {
+        String result = "";
+        for (Role role:roles){
+            result = result + " " + role.getName();
+        }
+        return result;
+    }
 }
