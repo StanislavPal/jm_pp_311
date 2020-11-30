@@ -56,9 +56,9 @@ public class RolesController {
     }
 
     @PostMapping()
-    public String create(@RequestParam(value = "role") String role) {
-        roleService.create(new Role(role));
-        System.out.println("-----post-role-create-------: " + role);
+    public String create(@RequestParam(value = "name") String name) {
+        roleService.create(new Role(name));
+        System.out.println("-----post-role-create-------: " + name);
         return "redirect:/admin/roles";
     }
 
