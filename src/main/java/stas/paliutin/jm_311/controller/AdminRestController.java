@@ -1,10 +1,11 @@
 package stas.paliutin.jm_311.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import stas.paliutin.jm_311.exception_handling.NoSuchUserException;
+import stas.paliutin.jm_311.exception_handling.UserIncorrectData;
 import stas.paliutin.jm_311.model.User;
 import stas.paliutin.jm_311.service.UserService;
 
@@ -24,7 +25,31 @@ public class AdminRestController {
 
     @GetMapping("/users/{id}")
     public User getUserById(@PathVariable("id") Long id) {
-        return userService.getById(id);
+        User user = userService.getById(id);
+
+        if(user == null) {
+            throw new NoSuchUserException("There is no User found with ID = "
+                    + id + " in Database");
+        }
+        return user;
+    }
+
+    //По Трегулову
+    @ExceptionHandler
+    public ResponseEntity<UserIncorrectData> exceptionHandler(NoSuchUserException exception) {
+        UserIncorrectData data = new UserIncorrectData();
+        data.setInfo( exception.getMessage() );
+
+        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+    }
+
+    //По Трегулову
+    @ExceptionHandler
+    public ResponseEntity<UserIncorrectData> exceptionHandler(Exception exception) {
+        UserIncorrectData data = new UserIncorrectData();
+        data.setInfo( exception.getMessage() );
+
+        return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
     }
 
 }
