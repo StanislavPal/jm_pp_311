@@ -20,18 +20,48 @@ public class AdminRestController {
 
     @GetMapping("/users")
     public List<User> showAllUsers() {
-        return userService.findAll();
+        List<User> users = userService.findAll();
+
+        if ( users == null) {
+            throw new NoSuchUserException("There are no Users found");
+        }
+        return users;
     }
 
     @GetMapping("/users/{id}")
     public User getUserById(@PathVariable("id") Long id) {
-        User user = userService.getById(id);
+        User user = userService.findOne(id);
 
         if(user == null) {
             throw new NoSuchUserException("There is no User found with ID = "
                     + id + " in Database");
         }
         return user;
+    }
+
+    @PostMapping("/users")
+    public User addNewUser(@RequestBody User user) {
+        userService.create(user);
+        return user;
+    }
+
+    @PutMapping("/users")
+    public User updateUser(@RequestBody User user) {
+        userService.update(user);
+        return user;
+    }
+
+    @DeleteMapping("/users/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        User user = userService.findOne(id);
+
+        if (user == null) {
+            throw new NoSuchUserException("There is no User found with ID = "
+                    + id + " in Database");
+        }
+
+        userService.delete(id);
+        return "The User with ID = " + id + " was deleted";
     }
 
     //По Трегулову

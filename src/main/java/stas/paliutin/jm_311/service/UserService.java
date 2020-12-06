@@ -18,9 +18,6 @@ public class UserService {
     private Dao<User> userDao;
 
     @Autowired
-    private RoleService roleService;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
@@ -29,7 +26,7 @@ public class UserService {
     }
 
     @Transactional
-    public User getById(long id) {
+    public User findOne(long id) {
         return userDao.findOne(id);
     }
 
@@ -40,8 +37,8 @@ public class UserService {
 
     @Transactional
     public void update(User user) {
-        if (user.getPassword().equals("")) {
-            user.setPassword(getById(user.getId()).getPassword());
+        if (( user.getPassword() == null ) ||  ( "".equals( user.getPassword() ) )) {
+            user.setPassword(findOne(user.getId()).getPassword());
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
