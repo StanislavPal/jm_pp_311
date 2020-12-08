@@ -1,46 +1,68 @@
 let users
-function test() {
-    fetch("/api/users").then(
+let roles
+
+function getRoles() {
+    fetch("/api/roles").then(
         res => {
             res.json().then(
-                users => {
-                    console.log(users);
-                    if (users.length > 0 ) {
-                        let tmp = ""
-                        users.forEach((user)=>{
-                            tmp += "<tr id = " + user.id + ">"
-                            tmp += "<td>" + user.id + "</td>"
-                            tmp += "<td>" + user.username + "</td>"
-                            tmp += "<td>" + user.name + "</td>"
-                            tmp += "<td>" + user.lastName + "</td>"
-                            tmp += "<td>" + user.age + "</td>"
-                            tmp += "<td>"
-                            user.roles.forEach((role) => {
-                                tmp += role.name + " "
-                            })
-                            tmp += "</td>"
-                            tmp += "<td>" +
-                                        "<button data-id=" + user.id + " type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#editModal\">" +
-                                            "Edit" +
-                                        "</button>" +
-                                    "</td>" +
-                                    "<td>" +
-                                        "<button data-id=" + user.id + " value=" + user.id + " type=\"button\" class=\"btn btn-danger my-delete-btn\">" +
-                            // data-toggle="modal" data-target="#deleteModal"
-                                            "Delete" +
-                                        "</button>" +
-                                    "</td>" +
-                                "</tr>"
-                        })
-                        document.getElementById("users-table").innerHTML = tmp
-                    }
+                roles => {
+                    console.log(roles)
+                    return roles
                 }
             )
         }
     )
 }
 
-test()
+function getUsers() {
+    fetch("/api/users").then(
+        res => {
+            res.json().then(
+                users => {
+                    console.log(users)
+                    return users
+                }
+            )
+        }
+    )
+}
+
+function updateUsersTable(users) {
+    console.log(users)
+    if (users.length > 0) {
+        let tmp = ""
+        users.forEach((user) => {
+            tmp += "<tr id = " + user.id + ">"
+            tmp += "<td>" + user.id + "</td>"
+            tmp += "<td>" + user.username + "</td>"
+            tmp += "<td>" + user.name + "</td>"
+            tmp += "<td>" + user.lastName + "</td>"
+            tmp += "<td>" + user.age + "</td>"
+            tmp += "<td>"
+            user.roleIds.forEach((id) => {
+                tmp += id + " "
+            })
+            tmp += "</td>"
+            tmp += "<td>" +
+                "<button data-id=" + user.id + " type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#editModal\">" +
+                "Edit" +
+                "</button>" +
+                "</td>" +
+                "<td>" +
+                "<button data-id=" + user.id + " value=" + user.id + " type=\"button\" class=\"btn btn-danger my-delete-btn\">" +
+                // data-toggle="modal" data-target="#deleteModal"
+                "Delete" +
+                "</button>" +
+                "</td>" +
+                "</tr>"
+        })
+        document.getElementById("users-table").innerHTML = tmp
+    }
+}
+
+roles = getRoles()
+users = getUsers()
+updateUsersTable( getUsers() )
 
 const buttonDelete = $(".my-delete-btn");
 buttonDelete.click(

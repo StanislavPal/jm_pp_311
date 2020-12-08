@@ -16,13 +16,13 @@ import java.util.List;
 
 @RestController()
 @RequestMapping("/api")
-public class ApiRestController {
+public class UsersRestController {
 
     private UserService userService;
     private RoleService roleService;
 
     @Autowired
-    public ApiRestController(UserService userService, RoleService roleService) {
+    public UsersRestController(UserService userService, RoleService roleService) {
         this.roleService = roleService;
         this.userService = userService;
     }
@@ -63,9 +63,11 @@ public class ApiRestController {
     }
 
     @PutMapping("/users")
-    public User updateUser(@RequestBody User user) {
-        userService.update(user);
-        return user;
+    public UserDTO updateUser(@RequestBody UserDTO userDTO) {
+        User user = new User(userDTO);
+        user.setRoles( roleService.findByIds( userDTO.getRoleIds() ) );
+        user = userService.update(user);
+        return new UserDTO( user );
     }
 
     @DeleteMapping("/users/{id}")

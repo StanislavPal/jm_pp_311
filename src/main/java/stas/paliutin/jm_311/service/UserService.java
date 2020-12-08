@@ -36,13 +36,14 @@ public class UserService {
     }
 
     @Transactional
-    public void update(User user) {
+    public User update(User user) {
         if (( user.getPassword() == null ) ||  ( "".equals( user.getPassword() ) )) {
             user.setPassword(findOne(user.getId()).getPassword());
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         userDao.update(user);
+        return user;
     }
 
     @Transactional

@@ -1,6 +1,7 @@
 package stas.paliutin.jm_311.model;
 
 import org.springframework.security.core.GrantedAuthority;
+import stas.paliutin.jm_311.dto.RoleDTO;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -23,6 +24,11 @@ public class Role implements GrantedAuthority {
 
     public Role(String name) {
         this.name = name.toUpperCase();
+    }
+
+    public Role(RoleDTO roleDTO) {
+        this.id = roleDTO.getId();
+        this.name = roleDTO.getName();
     }
 
     @Override

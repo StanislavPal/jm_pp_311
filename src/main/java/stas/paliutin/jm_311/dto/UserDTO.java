@@ -23,36 +23,16 @@ public class UserDTO {
     private Set<Long> roleIds = new HashSet<>();
 
     public UserDTO() {
-        System.out.println("- - - - - - - Clear construct - - - - - - -");
     }
 
-    public UserDTO(long id,
-                   String name,
-                   String lastName,
-                   int age,
-                   String username,
-                   String password,
-                   Set<Long> roleIds) {
-
-        System.out.println("======== + UserDTO Construct by elements + =========");
-        this.id = id;
-        this.name = name;
-        this.lastName = lastName;
-        this.age = age;
-        this.username = username;
-        this.password = password;
-        this.roleIds = roleIds;
-    }
-
-    public UserDTO(User user) {
-        System.out.println("= = = = = = = = + UserDTO Construct by User + = = = = = = = = =");
+     public UserDTO(User user) {
         this.id = user.getId();
         this.name = user.getName();
         this.lastName = user.getLastName();
         this.age = user.getAge();
         this.username = user.getUsername();
-        this.password = user.getPassword();
-//        this.password = "";
+//        this.password = user.getPassword();
+        this.password = "";
         for (Role role : user.getRoles() ) {
             this.roleIds.add( role.getId() );
         }
@@ -114,11 +94,6 @@ public class UserDTO {
         this.roleIds = roleIds;
     }
 
-//    public UserDTO setRole(Role role) {
-//        roles.add(role);
-//        return this;
-//    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -131,12 +106,4 @@ public class UserDTO {
                 ", roles=" + roleIds +
                 '}';
     }
-
-//    public String rolesToString() {
-//        String result = "";
-//        for (Role role:roles){
-//            result = result + " " + role.getName();
-//        }
-//        return result;
-//    }
 }
