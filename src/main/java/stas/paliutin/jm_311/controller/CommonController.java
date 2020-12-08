@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/")
-public class HelloController {
+public class CommonController {
 
 	UserService userService;
 

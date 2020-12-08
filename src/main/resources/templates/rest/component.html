@@ -2,41 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 
-<div th:fragment="logout"><p><a href="/logout">Logout</a></p></div>
-
-<div th:fragment="copy"><p>© 2020 Stanislav Paliutin</p></div>
-
-<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#" th:text="${user.name}+' '+${user.lastName} + ' roles:' + ${user.rolesToString()}">Navbar brand</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/admin">Admin (REST)<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/soap">Admin (SOAP)<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/old/users">Admin (old)<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/hello">Hello page <span class="sr-only">(current)</span></a>
-            </li>
-        </ul>
-        <span class="navbar-text">
-            <a class="nav-link" href="/logout">Logout</a>
-    </span>
-    </div>
-</nav>
-
-<div th:fragment="modal-user-edit" class="modal fade" th:id="'editModal' + ${user.id}" data-backdrop="static" data-keyboard="false" tabindex="-1" th:aria-labelledby="'staticBackdropLabelEdit' + ${user.id}" aria-hidden="true">
+<div th:fragment="modal-user-edit" class="modal fade" id="editModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelEdit" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" th:id="'staticBackdropLabelEdit' + ${user.id}">Edit user</h5>
+                <h5 class="modal-title" id="staticBackdropLabelEdit">Edit user</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -44,7 +14,7 @@
             <form method="post" th:action="@{/admin/users/{id}(id=${user.id})}" class="form">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label >Username: </label>
+                        <label>Username: </label>
                         <input name="username" th:value="${user.username}" type="text" class="form-control">
                     </div>
                     <div class="form-group">
@@ -86,11 +56,11 @@
     </div>
 </div>
 
-<div th:fragment="modal-user-delete" class="modal fade" th:id="'deleteModal' + ${user.id}" data-backdrop="static" data-keyboard="false" tabindex="-1" th:aria-labelledby="'staticBackdropLabelDelete' + ${user.id}" aria-hidden="true">
+<div th:fragment="modal-user-delete" class="modal fade" id="deleteModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelDelete" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" th:id="'staticBackdropLabelDelete' + ${user.id}">Delete user</h5>
+                <h5 class="modal-title" id="staticBackdropLabelDelete">Delete user</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -202,36 +172,9 @@
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
-            <th:block th:each="user : ${users}">
-                <tr>
-                    <td th:text="${user.id}"></td>
-                    <td th:text="${user.username}"></td>
-                    <td th:text="${user.name}"></td>
-                    <td th:text="${user.lastName}"></td>
-                    <td th:text="${user.age}"></td>
-                    <td th:text="${user.rolesToString()}"></td>
-                    <td>
+            <tbody id="users-table">
 
-                        <button type="button" class="btn btn-info" data-toggle="modal" th:attr="data-target='#editModal' + ${user.id}">
-                            Edit
-                        </button>
-
-                        <!-- Modal -->
-                        <div th:replace="component :: modal-user-edit"></div>
-
-                    </td>
-                    <td>
-
-                        <button type="button" class="btn btn-danger" data-toggle="modal" th:attr="data-target='#deleteModal' + ${user.id}">
-                            Delete
-                        </button>
-
-                        <!-- Modal -->
-                        <div th:replace="component :: modal-user-delete"></div>
-
-                    </td>
-                </tr>
-            </th:block>
+            </tbody>
         </table>
         </p>
     </div>

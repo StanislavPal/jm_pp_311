@@ -2,6 +2,7 @@ package stas.paliutin.jm_311.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import stas.paliutin.jm_311.dto.UserDTO;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -31,7 +32,7 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
@@ -39,6 +40,17 @@ public class User implements UserDetails {
     private Set<Role> roles = new HashSet<>();
 
     public User() {}
+
+    public User(UserDTO userDTO) {
+        this.id = userDTO.getId();
+        this.name = userDTO.getName();
+        this.lastName = userDTO.getLastName();
+        this.age = userDTO.getAge();
+        this.username = userDTO.getUsername();
+        this.password = userDTO.getPassword();
+//
+//        this.roles = userDTO.getRoles();
+    }
 
     public long getId() {
         return id;

@@ -8,7 +8,7 @@ import stas.paliutin.jm_311.model.Role;
 import stas.paliutin.jm_311.service.RoleService;
 
 @Controller
-@RequestMapping("/admin/roles")
+@RequestMapping("/admin/old/roles")
 public class RolesController {
 
     private RoleService roleService;
@@ -33,18 +33,18 @@ public class RolesController {
     @GetMapping("/{id}")
     public String showById(@PathVariable("id") long id,
                            Model model) {
-        model.addAttribute("role", roleService.getById(id) );
+        model.addAttribute("role", roleService.findOne(id) );
         return "roles/show";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") long id,
                        Model model) {
-        Role role = roleService.getById(id);
+        Role role = roleService.findOne(id);
         if (role == null) {
             return "redirect:/admin/roles";
         }
-        model.addAttribute("role", roleService.getById(id) );
+        model.addAttribute("role", roleService.findOne(id) );
         return "roles/edit";
     }
 
@@ -52,19 +52,19 @@ public class RolesController {
     public String delete(@PathVariable("id") long id,
                          Model model) {
         roleService.delete(id);
-        return "redirect:/admin/roles";
+        return "redirect:/admin/old/roles";
     }
 
     @PostMapping()
     public String create(@RequestParam(value = "name") String name) {
         roleService.create(new Role(name));
         System.out.println("-----post-role-create-------: " + name);
-        return "redirect:/admin/roles";
+        return "redirect:/admin/old/roles";
     }
 
     @PostMapping("/{id}")
     public String update(@ModelAttribute("role") Role role) {
         roleService.update(role);
-        return "redirect:/admin/roles";
+        return "redirect:/admin/old/roles";
     }
 }

@@ -5,7 +5,7 @@
     <title>Новый пользователь</title>
 </head>
 <body>
-<form method="post" action="/admin/users">
+<form method="post" action="/admin/old/users">
     <label for="username_label">Username: </label>
     <input name="username" type="text" id="username_label">
     <br/>
@@ -33,9 +33,9 @@
     Roles:
     <th:block th:each="role : ${roles}">
         <p><input type="checkbox" name="roles_checkbox"
-                  th:value="${role.role}"
-                  th:text="${role.role}"
-                  th:checked="${user.hasRole(role)}"></p>
+                  th:value="${role.name}"
+                  th:text="${role.name}"
+                  th:checked="${user.roles.contains(role)}"></p>
     </th:block>
 
     <input type="submit" value="Добавить юзера">

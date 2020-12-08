@@ -46,9 +46,10 @@ public class UserService {
     }
 
     @Transactional
-    public void create(User user) {
+    public User create(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.create(user);
+        return user;
     }
 
     @Transactional

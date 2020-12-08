@@ -4,45 +4,62 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import stas.paliutin.jm_311.dto.UserDTO;
 import stas.paliutin.jm_311.exception_handling.NoSuchUserException;
 import stas.paliutin.jm_311.exception_handling.UserIncorrectData;
 import stas.paliutin.jm_311.model.User;
+import stas.paliutin.jm_311.service.RoleService;
 import stas.paliutin.jm_311.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
-@RequestMapping("/admin")
-public class AdminRestController {
+@RequestMapping("/api")
+public class ApiRestController {
+
+    private UserService userService;
+    private RoleService roleService;
 
     @Autowired
-    private UserService userService;
+    public ApiRestController(UserService userService, RoleService roleService) {
+        this.roleService = roleService;
+        this.userService = userService;
+    }
 
     @GetMapping("/users")
-    public List<User> showAllUsers() {
-        List<User> users = userService.findAll();
+    public List<UserDTO> showAllUsers() {
 
-        if ( users == null) {
+        List<User> users = userService.findAll();
+        if ( users == null || users.isEmpty() ) {
             throw new NoSuchUserException("There are no Users found");
         }
-        return users;
+
+        List<UserDTO> usersDTO = new ArrayList<>();
+        for (User user : users){
+            usersDTO.add( new UserDTO(user) );
+        }
+
+        return usersDTO;
     }
 
     @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable("id") Long id) {
-        User user = userService.findOne(id);
+    public UserDTO getUserById(@PathVariable("id") Long id) {
+        UserDTO userDTO = new UserDTO( userService.findOne(id) );
 
-        if(user == null) {
+        if(userDTO == null) {
             throw new NoSuchUserException("There is no User found with ID = "
                     + id + " in Database");
         }
-        return user;
+        return userDTO;
     }
 
     @PostMapping("/users")
-    public User addNewUser(@RequestBody User user) {
-        userService.create(user);
-        return user;
+    public UserDTO addNewUser(@RequestBody UserDTO userDTO) {
+        User user = new User(userDTO);
+        user.setRoles( roleService.findByIds( userDTO.getRoleIds() ) );
+        user = userService.create(user);
+        return new UserDTO( user );
     }
 
     @PutMapping("/users")

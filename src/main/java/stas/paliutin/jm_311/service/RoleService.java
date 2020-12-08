@@ -22,7 +22,7 @@ public class RoleService {
     }
 
     @Transactional
-    public Role getById(long id) {
+    public Role findOne(long id) {
         return roleDao.findOne(id);
     }
 
@@ -51,6 +51,16 @@ public class RoleService {
         if (roleNames != null) {
             for (String roleName : roleNames) {
                 dbRoles.add( findOne( roleName ) );
+            }
+        }
+        return dbRoles;
+    }
+
+    public Set<Role> findByIds(Set<Long> roleIds) {
+        Set<Role> dbRoles = new HashSet<>();
+        if (roleIds != null) {
+            for (Long roleId : roleIds) {
+                dbRoles.add( findOne( roleId ) );
             }
         }
         return dbRoles;
