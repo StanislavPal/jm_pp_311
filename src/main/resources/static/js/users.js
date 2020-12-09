@@ -85,6 +85,7 @@ function updateUsersTable(users) {
                 "</td>" +
                 "</tr>"
         })
+
         document.getElementById("users-table").innerHTML = tmp
     }
 }
@@ -94,12 +95,39 @@ function updateUsersTable(users) {
 $('#editModal').on('show.bs.modal', async function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var id = button.data('whatever') // Extract info from data-* attributes
+
+    //Дикий микс jquery и poor js
     let response = await fetch('/api/users/' + id)
     let user = await response.json()
     console.log(user)
+
     var modal = $(this)
-    modal.find('.modal-title').text('id = ' + id + '; username = ' + user.username)
-    modal.find('.modal-body input').val(user.lastName)
+    // modal.find('.modal-title').text('id = ' + id + '; username = ' + user.username)
+    modal.find('#id-edit-form').val(user.id)
+    modal.find('#username-edit-form').val(user.username)
+    modal.find('#password-edit-form').val(user.password)
+    modal.find('#name-edit-form').val(user.name)
+    modal.find('#lastname-edit-form').val(user.lastName)
+    modal.find('#age-edit-form').val(user.age)
+})
+
+$('#deleteModal').on('show.bs.modal', async function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var id = button.data('whatever') // Extract info from data-* attributes
+
+    //Дикий микс jquery и poor js
+    let response = await fetch('/api/users/' + id)
+    let user = await response.json()
+    console.log(user)
+
+    var modal = $(this)
+    // modal.find('.modal-title').text('id = ' + id + '; username = ' + user.username)
+    modal.find('#id-delete-form').val(user.id)
+    modal.find('#username-delete-form').val(user.username)
+    modal.find('#password-delete-form').val(user.password)
+    modal.find('#name-delete-form').val(user.name)
+    modal.find('#lastname-delete-form').val(user.lastName)
+    modal.find('#age-delete-form').val(user.age)
 })
 
 getResponse()
