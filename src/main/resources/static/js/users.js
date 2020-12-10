@@ -48,7 +48,43 @@ function updateUsersTable(users) {
     }
 }
 
-//получение данных с сервера массива ролей и массива юзеров
+//Заполенение области чекбоксов ролей в форме,
+//Аргумент roleIds - массив айдишников юзера, чтобы отметить роли, которые у него есть
+function setFormRoles(roleIds) {
+
+    let tmp = ''
+
+    roles.forEach((role) => {
+        let checked = roleIds.toString().includes(role.id) ? `checked` : ``
+        tmp += `<div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="roles" value="${role.id}"
+                                id="defaultCheck${role.id}" ${checked}>
+                    <label class="form-check-label" for="defaultCheck${role.id}">
+                        ` + role.name + `
+                    </label>
+                </div>`
+
+    })
+    return tmp
+}
+
+//Заполеняем форму мадалки данными юзера
+function setDataToModalForm(modal, user) {
+
+    // modal.find('.modal-title').text('id = ' + id + '; username = ' + user.username)
+    modal.find('input[name="id"]').val(user.id)
+    modal.find('input[name="username"]').val(user.username)
+    modal.find('input[name="password"]').val(user.password)
+    modal.find('input[name="name"]').val(user.name)
+    modal.find('input[name="lastname"]').val(user.lastName)
+    modal.find('input[name="age"]').val(user.age)
+    let tmp = setFormRoles(user.roleIds)
+
+    modal.find(".my-form-role-group").html(tmp)
+}
+
+//получаем списки юзеров и всех возможных ролей
+// и заполняем глобальные переменные users и roles
 async function getDataForTable() {
     let response = await fetch('/api/roles')
     roles = await response.json()
@@ -59,6 +95,7 @@ async function getDataForTable() {
     console.log(users)
 }
 
+//заполняем переменные а затем заполняем данными главную таблицу юзеров
 getDataForTable().then(() => {updateUsersTable(users)})
 
 async function postData(url = '', data = {}) {
@@ -87,95 +124,26 @@ async function deleteData(url = '') {
     return await response.text(); // parses JSON response into native JavaScript objects
 }
 
-// async function getUsers() {
-//     let response = await fetch('/api/users')
-//     users = await response.json()
-// }
+function setDataToModal(action) {
+    $(`#${action}Modal`).on('show.bs.modal', async function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('whatever') // Extract info from data-* attributes
 
-// function getRoles() {
-//     fetch("/api/roles").then(
-//         res => {
-//             res.json().then(
-//                 roles => {
-//                     console.log(roles)
-//                 }
-//                 return roles
-//             )
-//         }
-//     )
-// }
+        //Дикий микс jquery и poor js
+        let response = await fetch('/api/users/' + id)
+        let user = await response.json()
+        console.log(user)
 
-// function getUsers() {
-//     fetch("/api/users").then(
-//         res => {
-//             res.json().then(
-//                 users => {
-//                     console.log(users)
-//                     return users
-//                 }
-//             )
-//         }
-//     )
-// }
+        var modal = $(this)
+        modal.find('fieldset').prop('disabled', action == "delete")
+        // modal.find('.modal-title').text('id = ' + id + '; username = ' + user.username)
 
-//Функция вешается на событие появления модалки бутстрапа
-//делаем запрос данных юзера, чтобы ими заполнить форму
-$('#editModal').on('show.bs.modal', async function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var id = button.data('whatever') // Extract info from data-* attributes
-
-    //Дикий микс jquery и poor js
-    let response = await fetch('/api/users/' + id)
-    let user = await response.json()
-    console.log(user)
-
-    var modal = $(this)
-    // modal.find('.modal-title').text('id = ' + id + '; username = ' + user.username)
-    modal.find('#id-edit-form').val(user.id)
-    modal.find('#username-edit-form').val(user.username)
-    modal.find('#password-edit-form').val(user.password)
-    modal.find('#name-edit-form').val(user.name)
-    modal.find('#lastname-edit-form').val(user.lastName)
-    modal.find('#age-edit-form').val(user.age)
-
-    let tmp = '';
-
-    roles.forEach((role) => {
-        let checked = user.roleIds.toString().includes(role.id) ? `checked` : ``
-        tmp += `<div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="roles" value="${role.id}"
-                                id="defaultCheck${role.id}" ${checked}>
-                    <label class="form-check-label" for="defaultCheck${role.id}">
-                        ` + role.name + `
-                    </label>
-                </div>`
-
+        setDataToModalForm(modal, user)
     })
+}
 
-    // let inputRoles = $('#my-form-role-group')
-    // inputRoles.innerHTML = tmp
-    $("#my-form-role-group").html(tmp)
-})
-
-$('#deleteModal').on('show.bs.modal', async function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var id = button.data('whatever') // Extract info from data-* attributes
-
-    //Дикий микс jquery и poor js
-    let response = await fetch('/api/users/' + id)
-    let user = await response.json()
-    console.log(user)
-
-    var modal = $(this)
-    // modal.find('.modal-title').text('id = ' + id + '; username = ' + user.username)
-    modal.find('#id-delete-form').val(user.id)
-    modal.find('#username-delete-form').val(user.username)
-    modal.find('#password-delete-form').val(user.password)
-    modal.find('#name-delete-form').val(user.name)
-    modal.find('#lastname-delete-form').val(user.lastName)
-    modal.find('#age-delete-form').val(user.age)
-
-})
+setDataToModal("edit")
+setDataToModal("delete")
 
 $('#btn-modal-edit-submit').on('click', async function() {
 
@@ -250,4 +218,23 @@ function getUserFormForm(form) {
 //         })
 //     }
 // )
+
+//Функция вешается на событие появления модалки бутстрапа
+//делаем запрос данных юзера, чтобы ими заполнить форму
+// $('#editModal').on('show.bs.modal', async function (event) {
+//     var button = $(event.relatedTarget) // Button that triggered the modal
+//     var id = button.data('whatever') // Extract info from data-* attributes
+//
+//     //Дикий микс jquery и poor js
+//     let response = await fetch('/api/users/' + id)
+//     let user = await response.json()
+//     console.log(user)
+//
+//     var modal = $(this)
+//     modal.find('fieldset').prop('disabled', false)
+//
+//     setDataToModalForm(modal, user)
+// })
+
+
 

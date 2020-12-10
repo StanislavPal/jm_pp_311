@@ -113,37 +113,7 @@
             </div>
             <div class="modal-body">
 
-                <form>
-                    <div class="form-group">
-                        <label for="id-edit-form" class="col-form-label">Id:</label>
-                        <input type="text" class="form-control" id="id-edit-form" name="id" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="username-edit-form" class="col-form-label">Username:</label>
-                        <input type="text" class="form-control" id="username-edit-form">
-                    </div>
-                    <div class="form-group">
-                        <label for="password-edit-form" class="col-form-label">Password:</label>
-                        <input type="password" class="form-control" id="password-edit-form">
-                    </div>
-                    <div class="form-group">
-                        <label for="name-edit-form" class="col-form-label">name:</label>
-                        <input type="text" class="form-control" id="name-edit-form">
-                    </div>
-                    <div class="form-group">
-                        <label for="lastname-edit-form" class="col-form-label">Last Name:</label>
-                        <input type="text" class="form-control" id="lastname-edit-form">
-                    </div>
-                    <div class="form-group">
-                        <label for="age-edit-form" class="col-form-label">Age:</label>
-                        <input type="number" class="form-control" id="age-edit-form">
-                    </div>
-
-                    <div id="my-form-role-group">
-
-                    </div>
-
-                </form>
+                <div th:replace=" :: form-modal"></div>
 
             </div>
             <div class="modal-footer">
@@ -165,32 +135,7 @@
             </div>
             <div class="modal-body">
 
-                <form>
-                    <div class="form-group">
-                        <label for="id-delete-form" class="col-form-label">Id:</label>
-                        <input type="text" class="form-control" id="id-delete-form" name="id" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="username-delete-form" class="col-form-label">Username:</label>
-                        <input type="text" class="form-control" id="username-delete-form">
-                    </div>
-                    <div class="form-group">
-                        <label for="name-delete-form" class="col-form-label">name:</label>
-                        <input type="text" class="form-control" id="name-delete-form">
-                    </div>
-                    <div class="form-group">
-                        <label for="lastname-delete-form" class="col-form-label">Last Name:</label>
-                        <input type="text" class="form-control" id="lastname-delete-form">
-                    </div>
-                    <div class="form-group">
-                        <label for="age-delete-form" class="col-form-label">Age:</label>
-                        <input type="number" class="form-control" id="age-delete-form">
-                    </div>
-
-                    <div class="my-form-role-group">
-
-                    </div>
-                </form>
+                <div th:replace=" :: form-modal"></div>
 
             </div>
             <div class="modal-footer">
@@ -327,6 +272,36 @@
         </div>
     </div>
 </div>
+
+<form th:fragment="form-modal">
+    <fieldset>
+        <div class="form-group">
+            <label class="col-form-label">Id:</label>
+            <input type="text" class="form-control" name="id" disabled>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label">Username:</label>
+            <input type="text" class="form-control" name="username">
+        </div>
+        <div class="form-group">
+            <label class="col-form-label">name:</label>
+            <input type="text" class="form-control" name="name">
+        </div>
+        <div class="form-group">
+            <label class="col-form-label">Last Name:</label>
+            <input type="text" class="form-control" name="lastname">
+        </div>
+        <div class="form-group">
+            <label class="col-form-label">Age:</label>
+            <input type="number" class="form-control" name="age">
+        </div>
+
+        <div class="my-form-role-group">
+
+        </div>
+    </fieldset>
+</form>
+
 
 </body>
 </html>
