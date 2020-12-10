@@ -26,7 +26,6 @@ public class AdminSoapController {
     @GetMapping()
     public String restAdmin(Principal principal, Model model) {
         User user = userService.findOne( principal.getName() );
-//        User user = new User();
         //Информация о залогиневшемся юзере
         model.addAttribute("user", user);
         //Чистый объект с заполненной ролью по умолчанию, для формы нового пользователя
@@ -43,7 +42,6 @@ public class AdminSoapController {
     @GetMapping("/soap")
     public String soapAdmin(Principal principal, Model model) {
         User user = userService.findOne( principal.getName() );
-//        User user = new User();
         //Информация о залогиневшемся юзере
         model.addAttribute("user", user);
         //Чистый объект с заполненной ролью по умолчанию, для формы нового пользователя

@@ -69,18 +69,18 @@ function setFormRoles(roleIds) {
 }
 
 //Заполеняем форму мадалки данными юзера
-function setDataToModalForm(modal, user) {
+function setDataToForm(elem, user) {
 
     // modal.find('.modal-title').text('id = ' + id + '; username = ' + user.username)
-    modal.find('input[name="id"]').val(user.id)
-    modal.find('input[name="username"]').val(user.username)
-    modal.find('input[name="password"]').val(user.password)
-    modal.find('input[name="name"]').val(user.name)
-    modal.find('input[name="lastname"]').val(user.lastName)
-    modal.find('input[name="age"]').val(user.age)
+    elem.find('input[name="id"]').val(user.id)
+    elem.find('input[name="username"]').val(user.username)
+    elem.find('input[name="password"]').val(user.password)
+    elem.find('input[name="name"]').val(user.name)
+    elem.find('input[name="lastname"]').val(user.lastName)
+    elem.find('input[name="age"]').val(user.age)
     let tmp = setFormRoles(user.roleIds)
 
-    modal.find(".my-form-role-group").html(tmp)
+    elem.find(".my-form-role-group").html(tmp)
 }
 
 //получаем списки юзеров и всех возможных ролей
@@ -116,6 +116,24 @@ async function postData(url = '', data = {}) {
     return await response.json(); // parses JSON response into native JavaScript objects
 }
 
+async function putData(url = '', data = {}) {
+    // Default options are marked with *
+    const response = await fetch(url, {
+        method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *client
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+    });
+    return await response.json(); // parses JSON response into native JavaScript objects
+}
+
 async function deleteData(url = '') {
     // Default options are marked with *
     const response = await fetch(url, {
@@ -136,9 +154,10 @@ function setDataToModal(action) {
 
         var modal = $(this)
         modal.find('fieldset').prop('disabled', action == "delete")
+        modal.find('input[name="password"]').prop('type', (action == "delete") ? "hidden" : "password")
         // modal.find('.modal-title').text('id = ' + id + '; username = ' + user.username)
 
-        setDataToModalForm(modal, user)
+        setDataToForm(modal, user)
     })
 }
 
@@ -146,21 +165,65 @@ setDataToModal("edit")
 setDataToModal("delete")
 
 $('#btn-modal-edit-submit').on('click', async function() {
+    // действия, которые будут выполнены при наступлении события...
+
+    let form = this.closest('.modal').querySelector('form')
+    const {id, name, lastname, username, password, age, roles} = form;
+
+    let rolesArr = []
+    roles.forEach((role)=>{
+        if (role.checked) {
+            rolesArr.push(role.value)
+        }
+    })
 
     let user = {
-        name: "Rogers888",
-        lastName: "Str555ike",
-        age: 2,
-        username: "kop",
-        password: "123",
-        roleIds: [
-        1,
-        2
-    ]
+        id: id.value,
+        name: name.value,
+        lastName: lastname.value,
+        age: age.value,
+        username: username.value,
+        password: password.value,
+        roleIds: rolesArr,
     }
 
+    console.log($(this).text()) //todo del logs
+    console.log("=====++=====")
+    console.log(user)
+
+    let data = await putData("/api/users", user)
+    console.log(data); // JSON data parsed by `response.json()` call
+
+    getDataForTable()
+        .then(() => {updateUsersTable(users)})
+        .then(() => {$('#editModal').modal('hide')})
+
+});
+
+$('#btn-new-user-submit').on('click', async function() {
     // действия, которые будут выполнены при наступлении события...
-    console.log($(this).text())
+
+    let form = this.closest('.new-user-form').querySelector('form')
+    const {name, lastname, username, password, age, roles} = form;
+
+    let rolesArr = []
+
+    roles.forEach((role)=>{ //todo ++++ roles list
+        if (role.checked) {
+            rolesArr.push(role.value)
+        }
+    })
+
+    let user = {
+        name: name.value,
+        lastName: lastname.value,
+        age: age.value,
+        username: username.value,
+        password: password.value,
+        roleIds: rolesArr,
+    }
+
+    console.log($(this).text()) //todo del logs
     console.log("=====++=====")
     console.log(user)
 
@@ -169,7 +232,9 @@ $('#btn-modal-edit-submit').on('click', async function() {
 
     getDataForTable()
         .then(() => {updateUsersTable(users)})
-        .then(() => {$('#editModal').modal('hide')})
+        .then(() => {
+            $('#users').tab('show')
+        }) // смена вкладки на таблицу юзеров
 
 });
 
@@ -189,20 +254,36 @@ $('#btn-modal-delete-submit').on('click', async function() {
 
 });
 
+$('a[data-toggle="tab"]').on('shown.bs.tab', async function (e) {
+    // debugger
+    // e.target // newly activated tab
+    // e.relatedTarget // previous active tab
 
-function getUserFormForm(form) {
-    let user = {};
-    user.id = form.id
-    user.name = form.name
-    user.lastName = form.lastName
-    user.password = form.password
-    user.username = form.username
-    user.age = form.age
-    user.roleIds = form.roleIds
-    return user
-}
+    await getDataForTable()
 
-// const buttonDelete = $(".my-delete-btn");
+
+    let rolesArr = []
+    roles.forEach((role) => {
+        if(role.name == 'ROLE_USER') {
+            rolesArr.push(role.id)
+        }
+    })
+
+    if (e.target.id == "new-user-tab"){
+        setDataToForm($('#new'), {//todo ??? захардкоженный объект. Как делать так чтобы не зависить от изменения модели на сервере ???
+            id: "",
+            name: "",
+            lastName: "",
+            username: "",
+            password: "",
+            age: "",
+            roleIds: rolesArr
+        })
+    } else if (e.target.id == "users-table-tab") {
+        updateUsersTable(users)
+    }
+})
+
 // buttonDelete.click(
 //     function () {
 //         $.ajax("/api/users/" + $(this).attr("value"), {
