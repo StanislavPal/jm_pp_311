@@ -79,6 +79,14 @@ async function postData(url = '', data = {}) {
     return await response.json(); // parses JSON response into native JavaScript objects
 }
 
+async function deleteData(url = '') {
+    // Default options are marked with *
+    const response = await fetch(url, {
+        method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+    });
+    return await response.text(); // parses JSON response into native JavaScript objects
+}
+
 // async function getUsers() {
 //     let response = await fetch('/api/users')
 //     users = await response.json()
@@ -194,6 +202,22 @@ $('#btn-modal-edit-submit').on('click', async function() {
     getDataForTable()
         .then(() => {updateUsersTable(users)})
         .then(() => {$('#editModal').modal('hide')})
+
+});
+
+$('#btn-modal-delete-submit').on('click', async function() {
+    // действия, которые будут выполнены при наступлении события...
+    console.log($(this).text())
+
+    let id = document.querySelector("div#deleteModal input[name=id]")
+    console.log(id)
+
+    let data = await deleteData(`/api/users/${id.value}`)
+    console.log(data); // JSON data parsed by `response.json()` call
+
+    getDataForTable()
+        .then(() => {updateUsersTable(users)})
+        .then(() => {$('#deleteModal').modal('hide')})
 
 });
 
