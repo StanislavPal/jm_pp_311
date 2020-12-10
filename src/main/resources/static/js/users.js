@@ -61,7 +61,7 @@ function updateUsersTable(users) {
             tmp += "<td>" + user.age + "</td>"
             tmp += "<td>"
             user.roleIds.forEach((id) => {
-                roles.forEach((role) =>{
+                roles.forEach((role) => {
                     if (role.id == id) {
                         tmp += role.name + " "
                     }
@@ -109,6 +109,24 @@ $('#editModal').on('show.bs.modal', async function (event) {
     modal.find('#name-edit-form').val(user.name)
     modal.find('#lastname-edit-form').val(user.lastName)
     modal.find('#age-edit-form').val(user.age)
+
+    let tmp = '';
+
+    roles.forEach((role) => {
+        let checked = user.roleIds.toString().includes(role.id) ? `checked` : ``
+        tmp += `<div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="roles" value="${role.id}"
+                                id="defaultCheck${role.id}" ${checked}>
+                    <label class="form-check-label" for="defaultCheck${role.id}">
+                        ` + role.name + `
+                    </label>
+                </div>`
+
+    })
+
+    // let inputRoles = $('#my-form-role-group')
+    // inputRoles.innerHTML = tmp
+    $("#my-form-role-group").html(tmp)
 })
 
 $('#deleteModal').on('show.bs.modal', async function (event) {
@@ -128,6 +146,7 @@ $('#deleteModal').on('show.bs.modal', async function (event) {
     modal.find('#name-delete-form').val(user.name)
     modal.find('#lastname-delete-form').val(user.lastName)
     modal.find('#age-delete-form').val(user.age)
+
 })
 
 getResponse()
