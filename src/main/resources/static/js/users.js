@@ -1,8 +1,55 @@
 let users
 let roles
 
+//Заполнение таблицы юзеров; параметр - масив объектов юзер
+function updateUsersTable(users) {
+    // debugger
+    let userTable = document.getElementById("users-table")
+    userTable.innerHTML = ""
+
+    console.log(users)
+    if (users.length > 0) {
+        let tmp = ""
+        users.forEach((user) => {
+            tmp += "<tr id = " + user.id + ">"
+            tmp += "<td>" + user.id + "</td>"
+            tmp += "<td>" + user.username + "</td>"
+            tmp += "<td>" + user.name + "</td>"
+            tmp += "<td>" + user.lastName + "</td>"
+            tmp += "<td>" + user.age + "</td>"
+            tmp += "<td>"
+            user.roleIds.forEach((id) => {
+                roles.forEach((role) => {
+                    if (role.id == id) {
+                        tmp += role.name + " "
+                    }
+                })
+
+            })
+            tmp += "</td>"
+            tmp += "<td>" +
+                // "<button data-id=" + user.id + " type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#editModal\">" +
+                '<button type="button" class="btn btn-info" data-toggle="modal" data-target="#editModal" data-whatever="' + user.id + '">'+
+
+                "Edit" +
+                "</button>" +
+                "</td>" +
+                "<td>" +
+                // "<button data-id=" + user.id + " value=" + user.id + " type=\"button\" class=\"btn btn-danger my-delete-btn\">" +
+                // data-toggle="modal" data-target="#deleteModal"
+                '<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-whatever="' + user.id + '">'+
+                "Delete" +
+                "</button>" +
+                "</td>" +
+                "</tr>"
+        })
+
+        userTable.innerHTML = tmp
+    }
+}
+
 //получение данных с сервера массива ролей и массива юзеров
-async function getResponse() {
+async function getDataForTable() {
     let response = await fetch('/api/roles')
     roles = await response.json()
     console.log(roles)
@@ -10,10 +57,27 @@ async function getResponse() {
     response = await fetch('/api/users')
     users = await response.json()
     console.log(users)
-
-    updateUsersTable(users)
 }
 
+getDataForTable().then(() => {updateUsersTable(users)})
+
+async function postData(url = '', data = {}) {
+    // Default options are marked with *
+    const response = await fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *client
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+    });
+    return await response.json(); // parses JSON response into native JavaScript objects
+}
 
 // async function getUsers() {
 //     let response = await fetch('/api/users')
@@ -45,50 +109,6 @@ async function getResponse() {
 //         }
 //     )
 // }
-
-//Заполнение таблицы юзеров; параметр - масив объектов юзер
-function updateUsersTable(users) {
-    // debugger
-    console.log(users)
-    if (users.length > 0) {
-        let tmp = ""
-        users.forEach((user) => {
-            tmp += "<tr id = " + user.id + ">"
-            tmp += "<td>" + user.id + "</td>"
-            tmp += "<td>" + user.username + "</td>"
-            tmp += "<td>" + user.name + "</td>"
-            tmp += "<td>" + user.lastName + "</td>"
-            tmp += "<td>" + user.age + "</td>"
-            tmp += "<td>"
-            user.roleIds.forEach((id) => {
-                roles.forEach((role) => {
-                    if (role.id == id) {
-                        tmp += role.name + " "
-                    }
-                })
-
-            })
-            tmp += "</td>"
-            tmp += "<td>" +
-                // "<button data-id=" + user.id + " type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#editModal\">" +
-                '<button type="button" class="btn btn-info" data-toggle="modal" data-target="#editModal" data-whatever="' + user.id + '">'+
-
-            "Edit" +
-                "</button>" +
-                "</td>" +
-                "<td>" +
-                // "<button data-id=" + user.id + " value=" + user.id + " type=\"button\" class=\"btn btn-danger my-delete-btn\">" +
-                // data-toggle="modal" data-target="#deleteModal"
-                '<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-whatever="' + user.id + '">'+
-                "Delete" +
-                "</button>" +
-                "</td>" +
-                "</tr>"
-        })
-
-        document.getElementById("users-table").innerHTML = tmp
-    }
-}
 
 //Функция вешается на событие появления модалки бутстрапа
 //делаем запрос данных юзера, чтобы ими заполнить форму
@@ -149,7 +169,34 @@ $('#deleteModal').on('show.bs.modal', async function (event) {
 
 })
 
-getResponse()
+$('#btn-modal-edit-submit').on('click', async function() {
+
+    let user = {
+        name: "Rogers888",
+        lastName: "Str555ike",
+        age: 2,
+        username: "kop",
+        password: "123",
+        roleIds: [
+        1,
+        2
+    ]
+    }
+
+    // действия, которые будут выполнены при наступлении события...
+    console.log($(this).text())
+    console.log("=====++=====")
+    console.log(user)
+
+    let data = await postData("/api/users", user)
+    console.log(data); // JSON data parsed by `response.json()` call
+
+    getDataForTable()
+        .then(() => {updateUsersTable(users)})
+        .then(() => {$('#editModal').modal('hide')})
+
+});
+
 
 function getUserFormForm(form) {
     let user = {};

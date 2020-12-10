@@ -148,7 +148,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Update</button>
+                <button type="button" class="btn btn-primary" id="btn-modal-edit-submit">Update</button>
             </div>
         </div>
     </div>
@@ -307,7 +307,7 @@
     </div>
 </div>
 
-<div th:fragment="test-block">
+<div th:fragment="test-security-block">
     <div class="row">
         <div class="col">authenticated users:</div>
         <div sec:authorize="isAuthenticated()" class="col">
