@@ -26,8 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("ADMIN").password("$2a$10$80Zp.Y8yZESi/R7F.5UYIOR7aAm.f9bUj0i3G5MHpCR5jp5Hab4Ym").roles("ADMIN");
-//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder()); // конфигурация для прохождения аутентификации
+//        auth.inMemoryAuthentication().withUser("ADMIN").password("$2a$10$80Zp.Y8yZESi/R7F.5UYIOR7aAm.f9bUj0i3G5MHpCR5jp5Hab4Ym").roles("ADMIN");
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder()); // конфигурация для прохождения аутентификации
     }
 
     @Override

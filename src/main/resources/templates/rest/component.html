@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org">
 <body>
 
 <div th:fragment="modal-user-edit" class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -13,7 +13,7 @@
             </div>
             <div class="modal-body">
 
-                <div th:replace=" :: form-modal"></div>
+                <div th:replace=" :: user-form"></div>
 
             </div>
             <div class="modal-footer">
@@ -35,7 +35,7 @@
             </div>
             <div class="modal-body">
 
-                <div th:replace=" :: form-modal"></div>
+                <div th:replace=" :: user-form"></div>
 
             </div>
             <div class="modal-footer">
@@ -46,7 +46,7 @@
     </div>
 </div>
 
-<div th:fragment="user-new" class="card new-user-form">
+<div th:fragment="new-user" class="card new-user-form">
     <div class="card-header">
         <h5 class="card-title">Add new user</h5>
     </div>
@@ -56,7 +56,7 @@
 
                 <p class="card-text">
 
-                    <div th:replace=" :: form-modal"></div>
+                    <div th:replace=" :: user-form"></div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" id="btn-new-user-submit">Create</button>
@@ -94,56 +94,7 @@
     </div>
 </div>
 
-<div th:fragment="user-table" class="card">
-    <div class="card-header">
-        <h5 class="card-title">About user</h5>
-    </div>
-    <div class="card-body">
-        <p class="card-text">
-        <table class="table table-hover">
-            <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Name</th>
-                <th>Last name</th>
-                <th>Age</th>
-                <th>Role</th>
-            </tr>
-                <tr>
-                    <td th:text="${user.id}"></td>
-                    <td th:text="${user.username}"></td>
-                    <td th:text="${user.name}"></td>
-                    <td th:text="${user.lastName}"></td>
-                    <td th:text="${user.age}"></td>
-                    <td th:text="${user.rolesToString()}"></td>
-                </tr>
-        </table>
-        </p>
-    </div>
-</div>
-
-<div th:fragment="test-security-block">
-    <div class="row">
-        <div class="col">authenticated users:</div>
-        <div sec:authorize="isAuthenticated()" class="col">
-            This content is only shown to authenticated users.
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">administrators:</div>
-        <div sec:authorize="hasRole('ROLE_ADMIN')" class="col">
-            This content is only shown to administrators.
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">users:</div>
-        <div sec:authorize="hasRole('ROLE_USER')" class="col">
-            This content is only shown to users.
-        </div>
-    </div>
-</div>
-
-<form th:fragment="form-modal">
+<form th:fragment="user-form">
     <fieldset>
         <div class="form-group">
             <label class="col-form-label">Id:</label>
@@ -173,6 +124,7 @@
         <div class="my-form-role-group">
 
         </div>
+
     </fieldset>
 </form>
 

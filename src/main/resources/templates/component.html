@@ -265,14 +265,13 @@
     </div>
 </div>
 
-<div th:fragment="test-block">
+<div th:fragment="test-security-block">
     <div class="row">
         <div class="col">authenticated users:</div>
         <div sec:authorize="isAuthenticated()" class="col">
             This content is only shown to authenticated users.
         </div>
-    </div>
-    <div class="row">
+    </div>    <div class="row">
         <div class="col">administrators:</div>
         <div sec:authorize="hasRole('ROLE_ADMIN')" class="col">
             This content is only shown to administrators.

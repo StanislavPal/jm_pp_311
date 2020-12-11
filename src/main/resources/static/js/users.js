@@ -187,10 +187,6 @@ $('#btn-modal-edit-submit').on('click', async function() {
         roleIds: rolesArr,
     }
 
-    console.log($(this).text()) //todo del logs
-    console.log("=====++=====")
-    console.log(user)
-
     let data = await putData("/api/users", user)
     console.log(data); // JSON data parsed by `response.json()` call
 
@@ -208,7 +204,7 @@ $('#btn-new-user-submit').on('click', async function() {
 
     let rolesArr = []
 
-    roles.forEach((role)=>{ //todo ++++ roles list
+    roles.forEach((role)=>{
         if (role.checked) {
             rolesArr.push(role.value)
         }
@@ -223,18 +219,12 @@ $('#btn-new-user-submit').on('click', async function() {
         roleIds: rolesArr,
     }
 
-    console.log($(this).text()) //todo del logs
-    console.log("=====++=====")
-    console.log(user)
-
     let data = await postData("/api/users", user)
     console.log(data); // JSON data parsed by `response.json()` call
 
     getDataForTable()
-        .then(() => {updateUsersTable(users)})
-        .then(() => {
-            $('#users').tab('show')
-        }) // смена вкладки на таблицу юзеров
+        // .then(() => {updateUsersTable(users)})
+        .then(() => {$('#a-users-table-tab').tab('show')}) // todo смена вкладки на таблицу юзеров
 
 });
 
@@ -269,8 +259,8 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', async function (e) {
         }
     })
 
-    if (e.target.id == "new-user-tab"){
-        setDataToForm($('#new'), {//todo ??? захардкоженный объект. Как делать так чтобы не зависить от изменения модели на сервере ???
+    if (e.target.id == "a-new-user-tab"){
+        setDataToForm($( "#"+e.target.getAttribute('aria-controls') ), {//todo ??? захардкоженный объект. Как делать так чтобы не зависить от изменения модели на сервере ???
             id: "",
             name: "",
             lastName: "",
@@ -279,7 +269,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', async function (e) {
             age: "",
             roleIds: rolesArr
         })
-    } else if (e.target.id == "users-table-tab") {
+    } else if (e.target.id == "a-users-table-tab") {
         updateUsersTable(users)
     }
 })
