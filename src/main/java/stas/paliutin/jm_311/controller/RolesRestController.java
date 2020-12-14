@@ -47,7 +47,7 @@ public class RolesRestController {
 
     @GetMapping("/roles/{id}")
     public UserDTO getUserById(@PathVariable("id") Long id) {
-        UserDTO userDTO = new UserDTO( userService.findOne(id) );
+        UserDTO userDTO = new UserDTO( userService.findById(id) );
 
         if(userDTO == null) {
             throw new NoSuchUserException("There is no User found with ID = "
@@ -74,7 +74,7 @@ public class RolesRestController {
 
     @DeleteMapping("/roles/{id}")
     public String deleteUser(@PathVariable Long id) {
-        User user = userService.findOne(id);
+        User user = userService.findById(id);
 
         if (user == null) {
             throw new NoSuchUserException("There is no User found with ID = "

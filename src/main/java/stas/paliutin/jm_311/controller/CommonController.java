@@ -41,7 +41,7 @@ public class CommonController {
 
     @GetMapping("/user")
 	public String userPage(Principal principal, ModelMap model) {
-		User user = userService.findOne( principal.getName() );
+		User user = userService.findByUsername( principal.getName() );
 		model.addAttribute("user", user);
 		return "user";
 	}

@@ -38,14 +38,14 @@ public class UsersController {
 
     @GetMapping("/{id}")
     public String showById(@PathVariable("id") long id, Model model) {
-        model.addAttribute("user", userService.findOne(id));
+        model.addAttribute("user", userService.findById(id));
         return "users/show";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") long id,
                        Model model) {
-        User user = userService.findOne(id);
+        User user = userService.findById(id);
         if (user == null) {
             return "redirect:/admin/old/users";
         }

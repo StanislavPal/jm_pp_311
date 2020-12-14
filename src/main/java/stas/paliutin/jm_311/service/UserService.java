@@ -24,7 +24,7 @@ public class UserService {
     }
 
     @Transactional
-    public User findOne(long id) {
+    public User findById(long id) {
         return userDao.findById(id).orElse(null);
     }
 
@@ -36,7 +36,7 @@ public class UserService {
     @Transactional
     public User update(User user) {
         if (( user.getPassword() == null ) ||  ( "".equals( user.getPassword() ) )) {
-            user.setPassword(findOne(user.getId()).getPassword());
+            user.setPassword( findById( user.getId() ).getPassword() );
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
@@ -52,7 +52,7 @@ public class UserService {
     }
 
     @Transactional
-    public User findOne(String username) {
+    public User findByUsername(String username) {
         return userDao.findByUsername(username).orElse(null);
     }
 }
