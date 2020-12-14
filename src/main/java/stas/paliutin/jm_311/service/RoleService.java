@@ -1,20 +1,20 @@
 package stas.paliutin.jm_311.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import stas.paliutin.jm_311.dao.Dao;
+import stas.paliutin.jm_311.dao.RoleRepository;
 import stas.paliutin.jm_311.model.Role;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class RoleService {
 
     @Autowired
-    @Qualifier("roleDaoImp")
-    private Dao<Role> roleDao;
+    private RoleRepository roleDao;
 
     @Transactional(readOnly = true)
     public List<Role> findAll() {
@@ -23,12 +23,12 @@ public class RoleService {
 
     @Transactional
     public Role findOne(long id) {
-        return roleDao.findOne(id);
+        return roleDao.findById(id).orElse(null);
     }
 
     @Transactional
     public Role findOne(String role) {
-        return roleDao.findOne(role);
+        return roleDao.findByName(role).orElse(null);
     }
 
     @Transactional
@@ -37,13 +37,8 @@ public class RoleService {
     }
 
     @Transactional
-    public void update(Role role) {
-        roleDao.update(role);
-    }
-
-    @Transactional
-    public void create(Role role) {
-        roleDao.create(role);
+    public void save(Role role) {
+        roleDao.save(role);
     }
 
     public Set<Role> findByNames(String[] roleNames) {

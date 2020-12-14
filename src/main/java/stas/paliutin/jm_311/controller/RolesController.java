@@ -57,14 +57,14 @@ public class RolesController {
 
     @PostMapping()
     public String create(@RequestParam(value = "name") String name) {
-        roleService.create(new Role(name));
+        roleService.save(new Role(name));
         System.out.println("-----post-role-create-------: " + name);
         return "redirect:/admin/old/roles";
     }
 
     @PostMapping("/{id}")
     public String update(@ModelAttribute("role") Role role) {
-        roleService.update(role);
+        roleService.save(role);
         return "redirect:/admin/old/roles";
     }
 }

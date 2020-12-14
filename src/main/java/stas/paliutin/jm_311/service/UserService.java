@@ -1,11 +1,10 @@
 package stas.paliutin.jm_311.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import stas.paliutin.jm_311.dao.Dao;
+import stas.paliutin.jm_311.dao.UserRepository;
 import stas.paliutin.jm_311.model.User;
 
 import java.util.List;
@@ -14,8 +13,7 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    @Qualifier("userDaoImp")
-    private Dao<User> userDao;
+    private UserRepository userDao;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -27,7 +25,7 @@ public class UserService {
 
     @Transactional
     public User findOne(long id) {
-        return userDao.findOne(id);
+        return userDao.findById(id).orElse(null);
     }
 
     @Transactional
@@ -42,19 +40,19 @@ public class UserService {
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        userDao.update(user);
+        userDao.save(user);
         return user;
     }
 
     @Transactional
     public User create(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userDao.create(user);
+        userDao.save(user);
         return user;
     }
 
     @Transactional
     public User findOne(String username) {
-        return userDao.findOne(username);
+        return userDao.findByUsername(username).orElse(null);
     }
 }
