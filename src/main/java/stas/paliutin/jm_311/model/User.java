@@ -169,7 +169,7 @@ public class User implements UserDetails {
         this.created_at = dateTime;
     }
 
-        public String rolesToString() { //todo delete
+        public String rolesToString() {
         String result = "";
         for (Role role:roles){
             result = result + " " + role.getName();
