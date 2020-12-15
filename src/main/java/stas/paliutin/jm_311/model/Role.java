@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import stas.paliutin.jm_311.dto.RoleDTO;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 // Этот класс реализует интерфейс GrantedAuthority, в котором необходимо переопределить только один метод getAuthority() (возвращает имя роли).
@@ -18,6 +19,10 @@ public class Role implements GrantedAuthority {
 
     @Column(name = "role")
     private String name;
+
+    @Column(insertable = false,
+            columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime created_at;
 
     public Role() {
     }

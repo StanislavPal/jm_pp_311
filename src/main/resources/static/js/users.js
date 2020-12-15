@@ -224,7 +224,7 @@ $('#btn-new-user-submit').on('click', async function() {
 
     getDataForTable()
         // .then(() => {updateUsersTable(users)})
-        .then(() => {$('#a-users-table-tab').tab('show')}) // todo смена вкладки на таблицу юзеров
+        .then(() => {$('#a-users-table-tab').tab('show')}) // смена вкладки на таблицу юзеров
 
 });
 

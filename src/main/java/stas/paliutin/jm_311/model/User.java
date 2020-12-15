@@ -1,10 +1,13 @@
 package stas.paliutin.jm_311.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import stas.paliutin.jm_311.dto.UserDTO;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +34,7 @@ public class User implements UserDetails {
 
     @Column(name = "password")
     private String password;
+//            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
@@ -38,6 +42,10 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @Column(insertable = false,
+            columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime created_at;
 
     public User() {}
 
@@ -153,7 +161,15 @@ public class User implements UserDetails {
         return this;
     }
 
-    public String rolesToString() {
+    public LocalDateTime getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(LocalDateTime dateTime) {
+        this.created_at = dateTime;
+    }
+
+        public String rolesToString() { //todo delete
         String result = "";
         for (Role role:roles){
             result = result + " " + role.getName();
