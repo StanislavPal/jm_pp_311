@@ -34,7 +34,6 @@ public class User implements UserDetails {
 
     @Column(name = "password")
     private String password;
-//            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
@@ -56,7 +55,6 @@ public class User implements UserDetails {
         this.age = userDTO.getAge();
         this.username = userDTO.getUsername();
         this.password = userDTO.getPassword();
-//
 //        this.roles = userDTO.getRoles();
     }
 
